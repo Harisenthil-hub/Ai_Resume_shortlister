@@ -1,0 +1,1 @@
+This project includes a React frontend in the 'frontend' directory. Build it with npm/yarn to produce the /frontend/dist files.
