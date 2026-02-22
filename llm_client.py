@@ -13,12 +13,12 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Constants
-API_KEY = os.getenv("OPENROUTER_API_KEY")
-MODEL = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3-8b-instruct")
-API_URL = "https://openrouter.ai/api/v1/chat/completions"
+API_KEY = os.getenv("GROQ_API_KEY")
+MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
+API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 if not API_KEY:
-    logger.warning("OPENROUTER_API_KEY is not set in .env file. API calls will fail.")
+    logger.warning("GROQ_API_KEY is not set in .env file. API calls will fail.")
 
 class LLMClient:
     def __init__(self):
@@ -27,25 +27,20 @@ class LLMClient:
         self.url = API_URL
 
     def _call_api(self, messages, temperature=0.1):
-        """Helper to call OpenRouter API via requests."""
+        """Helper to call Groq API via requests."""
         if not self.api_key:
             return None
 
         headers = {
             "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json",
-            "HTTP-Referer": "http://localhost",
-            "X-Title": "Resume Analyzer"
+            "Content-Type": "application/json"
         }
 
         payload = {
             "model": self.model,
             "messages": messages,
             "temperature": temperature,
-            # Strict JSON mode is model-dependent, usually safest to rely on prompt for OpenRouter generic models
-            # but we can try response_format if valid for the specific model. 
-            # Llama 3 on OpenRouter generally respects prompts well.
-            # "response_format": {"type": "json_object"} 
+            "response_format": {"type": "json_object"}
         }
 
         try:
@@ -53,7 +48,7 @@ class LLMClient:
                 self.url, 
                 headers=headers, 
                 json=payload, 
-                timeout=15  # HARD TIMEOUT 15s
+                timeout=30  # HARD TIMEOUT 30s
             )
             response.raise_for_status()
             
@@ -63,32 +58,37 @@ class LLMClient:
             return None
             
         except requests.exceptions.Timeout:
-            logger.error("OpenRouter API request timed out (15s).")
+            logger.error("Groq API request timed out (30s).")
             return None
         except Exception as e:
-            logger.error(f"OpenRouter API Request Failed: {e}")
+            logger.error(f"Groq API Request Failed: {e}")
             return None
 
     def evaluate_resume(self, resume_text, job_role):
         """
-        Evaluates a resume summary against a role using OpenRouter.
+        Evaluates a resume summary against a role using Groq.
         """
-        prompt = f"""You are an AI resume evaluator.
+        prompt = f"""You are an expert AI resume evaluator.
 
-Evaluate the resume summary below for the given role.
+Carefully evaluate the resume below for the given role. Consider:
+- Relevance of skills and experience to the role
+- Years of experience and career progression
+- Education and certifications
+- Project quality and technical depth
+- Communication and presentation
 
 Role: {job_role}
 
-Resume Summary:
+Resume:
 {resume_text}
 
-Return ONLY valid JSON:
+Return ONLY valid JSON with these fields:
 {{
-  "score": number,
-  "shortlisted": true/false,
-  "strengths": [],
-  "weaknesses": [],
-  "suggestions": []
+  "score": <integer from 0 to 100, where 0=completely unqualified, 50=average, 75=strong, 90+=exceptional>,
+  "shortlisted": <true if score >= 60, false otherwise>,
+  "strengths": ["list of 2-4 specific strengths"],
+  "weaknesses": ["list of 2-4 specific weaknesses or gaps"],
+  "suggestions": ["list of 2-3 actionable improvement suggestions"]
 }}
 """
         
@@ -135,12 +135,7 @@ Return ONLY valid JSON:
         # --- NORMALIZATION & SAFETY CHECKS ---
         score = parsed_data.get('score', 0)
         
-        # 1. Normalize 1-10 to 10-100 if needed (common LLM mistake)
-        if hasattr(score, 'real') and score <= 10 and score > 0:
-            logger.info(f"Normalizing score from {score} to {score*10}")
-            score *= 10
-            
-        # 2. Clamp to 0-100
+        # Clamp to 0-100
         try:
             score = int(score)
         except:

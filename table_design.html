@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Database Table Design — AI Resume Shortlister</title>
+</head>
+
+<body>
+
+    <h2>Database: resumes.db (SQLite)</h2>
+
+    <h3>Table: resumes</h3>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Column Name</th>
+                <th>Data Type</th>
+                <th>Constraints</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id</td>
+                <td>INTEGER</td>
+                <td>PRIMARY KEY, AUTOINCREMENT</td>
+                <td>Unique identifier for each record</td>
+            </tr>
+            <tr>
+                <td>filename</td>
+                <td>TEXT</td>
+                <td>—</td>
+                <td>Original name of the uploaded resume file</td>
+            </tr>
+            <tr>
+                <td>content</td>
+                <td>TEXT</td>
+                <td>—</td>
+                <td>Extracted plain text from the resume</td>
+            </tr>
+            <tr>
+                <td>role</td>
+                <td>TEXT</td>
+                <td>—</td>
+                <td>Target job role selected by the user</td>
+            </tr>
+            <tr>
+                <td>score</td>
+                <td>INTEGER</td>
+                <td>—</td>
+                <td>AI-generated match score (0 to 100)</td>
+            </tr>
+            <tr>
+                <td>analysis_json</td>
+                <td>TEXT</td>
+                <td>—</td>
+                <td>Full AI analysis result stored as JSON string</td>
+            </tr>
+            <tr>
+                <td>timestamp</td>
+                <td>DATETIME</td>
+                <td>DEFAULT CURRENT_TIMESTAMP</td>
+                <td>Date and time when the analysis was performed</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+
+    <h3>SQL Schema</h3>
+    <pre>
+CREATE TABLE IF NOT EXISTS resumes (
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    filename       TEXT,
+    content        TEXT,
+    role           TEXT,
+    score          INTEGER,
+    analysis_json  TEXT,
+    timestamp      DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+</pre>
+
+</body>
+
+</html>

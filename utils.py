@@ -1,4 +1,8 @@
+# utils.py
+# Utility functions for file parsing
+
 def extract_text_from_file(file):
+    """Extract plain text from a PDF or text file."""
     name = getattr(file, 'filename', '').lower()
     text = ""
     try:
@@ -29,41 +33,3 @@ def extract_text_from_file(file):
     except Exception as e:
         print(f"File Read Error: {e}")
         return ""
-
-def init_db(database_url='sqlite:///resumes.db'):
-    if database_url.startswith('sqlite:///'):
-        path = database_url.replace('sqlite:///','')
-        conn = sqlite3.connect(path)
-        c = conn.cursor()
-        c.execute('''CREATE TABLE IF NOT EXISTS resumes (id INTEGER PRIMARY KEY AUTOINCREMENT, filename TEXT, content TEXT)''')
-        conn.commit()
-        conn.close()
-
-def save_resume_to_db(filename, content, database_url='sqlite:///resumes.db'):
-    if database_url.startswith('sqlite:///'):
-        path = database_url.replace('sqlite:///','')
-        conn = sqlite3.connect(path)
-        c = conn.cursor()
-        c.execute('INSERT INTO resumes (filename, content) VALUES (?,?)', (filename, content))
-        conn.commit()
-        conn.close()
-
-def list_resumes_from_db(database_url='sqlite:///resumes.db'):
-    if database_url.startswith('sqlite:///'):
-        path = database_url.replace('sqlite:///','')
-        conn = sqlite3.connect(path)
-        c = conn.cursor()
-        c.execute('SELECT filename, content FROM resumes')
-        rows = c.fetchall()
-        conn.close()
-        return [{'filename': r[0], 'text': r[1]} for r in rows]
-    return []
-
-def delete_resume_from_db(filename, database_url='sqlite:///resumes.db'):
-    if database_url.startswith('sqlite:///'):
-        path = database_url.replace('sqlite:///','')
-        conn = sqlite3.connect(path)
-        c = conn.cursor()
-        c.execute('DELETE FROM resumes WHERE filename = ?', (filename,))
-        conn.commit()
-        conn.close()

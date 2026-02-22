@@ -68,6 +68,25 @@ export default function UploadPage({ setAnalysisResult }) {
                 <p style={{ color: 'var(--text-secondary)', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto' }}>
                     Instant AI Analysis (REST API)
                 </p>
+                <button
+                    onClick={() => navigate('/history')}
+                    style={{
+                        marginTop: '1.5rem',
+                        background: 'none',
+                        border: '1px solid var(--border)',
+                        color: 'var(--text-secondary)',
+                        padding: '0.7rem 1.5rem',
+                        borderRadius: '10px',
+                        cursor: 'pointer',
+                        fontSize: '0.95rem',
+                        fontWeight: '500',
+                        transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={(e) => { e.target.style.borderColor = 'var(--primary)'; e.target.style.color = 'var(--text-main)' }}
+                    onMouseLeave={(e) => { e.target.style.borderColor = 'var(--border)'; e.target.style.color = 'var(--text-secondary)' }}
+                >
+                    📋 View History
+                </button>
             </header>
 
             <div className="glass-card" style={{ padding: '3rem' }}>

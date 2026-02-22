@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Design — AI Resume Shortlister</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: #71717a;
+            font-size: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        /* ER Diagram Container */
+        .er-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Table Card */
+        .table-card {
+            background: #171717;
+            border: 1px solid #27272a;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(99, 102, 241, 0.08);
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #6366f1, #7c3aed);
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .table-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .table-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .table-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+        }
+
+        /* Columns */
+        .columns {
+            padding: 0;
+        }
+
+        .column-row {
+            display: grid;
+            grid-template-columns: 40px 1.5fr 1fr 2fr;
+            gap: 0.5rem;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #1f1f1f;
+            transition: background 0.15s;
+        }
+
+        .column-row:hover {
+            background: #1c1c1c;
+        }
+
+        .column-row:last-child {
+            border-bottom: none;
+        }
+
+        .col-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .col-icon.pk {
+            background: rgba(250, 204, 21, 0.15);
+            color: #facc15;
+        }
+
+        .col-icon.text {
+            background: rgba(99, 102, 241, 0.12);
+            color: #818cf8;
+        }
+
+        .col-icon.int {
+            background: rgba(16, 185, 129, 0.12);
+            color: #34d399;
+        }
+
+        .col-icon.date {
+            background: rgba(236, 72, 153, 0.12);
+            color: #f472b6;
+        }
+
+        .col-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #e4e4e7;
+        }
+
+        .col-type {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .col-type.integer {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+        }
+
+        .col-type.text-type {
+            background: rgba(99, 102, 241, 0.1);
+            color: #818cf8;
+        }
+
+        .col-type.datetime {
+            background: rgba(236, 72, 153, 0.1);
+            color: #f472b6;
+        }
+
+        .col-desc {
+            font-size: 0.82rem;
+            color: #71717a;
+            line-height: 1.4;
+        }
+
+        .constraint {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+        }
+
+        .constraint.pk {
+            background: rgba(250, 204, 21, 0.15);
+            color: #facc15;
+        }
+
+        .constraint.auto {
+            background: rgba(168, 85, 247, 0.12);
+            color: #c084fc;
+        }
+
+        .constraint.default {
+            background: rgba(99, 102, 241, 0.1);
+            color: #818cf8;
+        }
+
+        /* Database Info Card */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            max-width: 700px;
+            width: 100%;
+            margin: 2rem auto 0 auto;
+        }
+
+        .info-card {
+            background: #171717;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: #71717a;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .info-value.purple {
+            color: #a855f7;
+        }
+
+        .info-value.blue {
+            color: #6366f1;
+        }
+
+        .info-value.green {
+            color: #10b981;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 3rem;
+            color: #3f3f46;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Database Design</h1>
+    <p class="subtitle">AI Resume Shortlister — SQLite Schema</p>
+
+    <div class="er-container">
+        <div class="table-card">
+            <div class="table-header">
+                <div class="table-icon">🗄️</div>
+                <div>
+                    <div class="table-label">Table</div>
+                    <div class="table-name">resumes</div>
+                </div>
+            </div>
+
+            <div class="columns">
+                <!-- id -->
+                <div class="column-row">
+                    <div class="col-icon pk">🔑</div>
+                    <div class="col-name">
+                        id
+                        <span class="constraint pk">PK</span>
+                        <span class="constraint auto">AUTO</span>
+                    </div>
+                    <div><span class="col-type integer">INTEGER</span></div>
+                    <div class="col-desc">Primary key, auto-incremented</div>
+                </div>
+
+                <!-- filename -->
+                <div class="column-row">
+                    <div class="col-icon text">Aa</div>
+                    <div class="col-name">filename</div>
+                    <div><span class="col-type text-type">TEXT</span></div>
+                    <div class="col-desc">Original uploaded resume filename</div>
+                </div>
+
+                <!-- content -->
+                <div class="column-row">
+                    <div class="col-icon text">📝</div>
+                    <div class="col-name">content</div>
+                    <div><span class="col-type text-type">TEXT</span></div>
+                    <div class="col-desc">Extracted plain text from resume</div>
+                </div>
+
+                <!-- role -->
+                <div class="column-row">
+                    <div class="col-icon text">💼</div>
+                    <div class="col-name">role</div>
+                    <div><span class="col-type text-type">TEXT</span></div>
+                    <div class="col-desc">Target job role for evaluation</div>
+                </div>
+
+                <!-- score -->
+                <div class="column-row">
+                    <div class="col-icon int">🔢</div>
+                    <div class="col-name">score</div>
+                    <div><span class="col-type integer">INTEGER</span></div>
+                    <div class="col-desc">AI-generated match score (0–100)</div>
+                </div>
+
+                <!-- analysis_json -->
+                <div class="column-row">
+                    <div class="col-icon text">📊</div>
+                    <div class="col-name">analysis_json</div>
+                    <div><span class="col-type text-type">TEXT</span></div>
+                    <div class="col-desc">Full AI analysis stored as JSON</div>
+                </div>
+
+                <!-- timestamp -->
+                <div class="column-row">
+                    <div class="col-icon date">🕒</div>
+                    <div class="col-name">
+                        timestamp
+                        <span class="constraint default">DEFAULT</span>
+                    </div>
+                    <div><span class="col-type datetime">DATETIME</span></div>
+                    <div class="col-desc">Auto-set to current time on insert</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-value blue">1</div>
+                <div class="info-label">Table</div>
+            </div>
+            <div class="info-card">
+                <div class="info-value purple">7</div>
+                <div class="info-label">Columns</div>
+            </div>
+            <div class="info-card">
+                <div class="info-value green">SQLite</div>
+                <div class="info-label">Engine</div>
+            </div>
+        </div>
+    </div>
+
+    <p class="footer">resumes.db — File-based local database, auto-created on startup</p>
+
+</body>
+
+</html>

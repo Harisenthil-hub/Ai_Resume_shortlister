@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Architecture & Logic - Resume AI Shortlister</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #475569;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        header {
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-top: 40px;
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-top: 25px;
+        }
+
+        p,
+        li {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .alert {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .threshold-box {
+            background: #f1f5f9;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px dashed var(--secondary);
+            margin: 30px 0;
+        }
+
+        .threshold-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .diagram-container {
+            background: #fff;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>System Architecture & Logic</h1>
+            <p><strong>Project:</strong> Resume AI Shortlister</p>
+        </header>
+
+        <section id="system-flow">
+            <h2>1. How It Works (System Flow)</h2>
+            <p>The Resume AI Shortlister is an intelligent screening platform that automates the initial phase of
+                recruitment using Generative AI. It follows a structured workflow to ensure accuracy and speed.</p>
+
+            <div class="alert">
+                <strong>End-to-End Workflow:</strong>
+                <ol>
+                    <li><strong>Upload:</strong> User provides a resume (PDF/TXT) via the React frontend.</li>
+                    <li><strong>Extraction:</strong> Flask backend strips the text using <code>PyPDF2</code>.</li>
+                    <li><strong>Inference:</strong> The text is sent to the Llama 3 model with a custom instructional
+                        prompt.</li>
+                    <li><strong>Parsing:</strong> The AI outputs structured JSON data.</li>
+                    <li><strong>Visualization:</strong> Results are displayed on a premium dashboard with color-coded
+                        metrics.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="shortlisting-logic">
+            <h2>2. Shortlisting Logic & Thresholds</h2>
+            <p>The system evaluates candidates based on three primary dimensions: Skill Alignment, Experience Depth, and
+                Educational relevance. Instead of simple keyword matching, it performs a <strong>semantic
+                    analysis</strong> to understand the impact of previous work.</p>
+
+            <div class="threshold-box">
+                <p>SHORTLISTING THRESHOLD</p>
+                <span class="threshold-score">60 / 100</span>
+                <p>Candidates scoring <strong>60 or above</strong> are automatically marked for shortlisting.</p>
+            </div>
+
+            <p>Scores are normalized to a 100-point scale. If the model provides a 1-10 rating, the system automatically
+                scales it up by a factor of 10 to maintain consistency in reports.</p>
+        </section>
+
+        <section id="persistence">
+            <h2>3. Result Persistence</h2>
+            <p>To ensure data is not lost between sessions, the application implements a local persistence layer using
+                <strong>SQLite</strong>. Every analysis result is automatically logged.</p>
+            <div class="alert">
+                <strong>What is stored?</strong>
+                <ul>
+                    <li><strong>Metadata:</strong> Filename and targeted job role.</li>
+                    <li><strong>Content:</strong> The raw text extracted from the resume.</li>
+                    <li><strong>Intelligence:</strong> The final score and the multi-dimensional AI analysis (strengths,
+                        weaknesses).</li>
+                </ul>
+            </div>
+            <p>You can visualize all stored records by visiting the <code>/api/resumes</code> endpoint in your browser.
+            </p>
+        </section>
+
+        <section id="model-description">
+            <h2>4. AI Model Description</h2>
+            <p>The application leverages state-of-the-art Large Language Models (LLMs) to achieve human-like reasoning
+                during the screening process.</p>
+
+            <ul>
+                <li><strong>Model Name:</strong> Meta Llama 3 (8B Instruct)</li>
+                <li><strong>Deployment:</strong> Hosted via OpenRouter API</li>
+                <li><strong>Optimization:</strong> Low temperature setting (0.1) for deterministic and reliable output.
+                </li>
+                <li><strong>Format:</strong> Strictly adheres to JSON output for seamless integration with the backend.
+                </li>
+            </ul>
+        </section>
+
+        <section id="cloud-structure">
+            <h2>4. Cloud Infrastructure</h2>
+            <p>For high availability and performance, the following cloud-native structure is utilized or recommended:
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Recommended Service</th>
+                        <th>Function</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Frontend</strong></td>
+                        <td>Vercel / Netlify</td>
+                        <td>Global CDN for the React Application</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Backend</strong></td>
+                        <td>AWS App Runner / Render</td>
+                        <td>Scalable Server for API Processing</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Database</strong></td>
+                        <td>Supabase (PostgreSQL)</td>
+                        <td>Candidate tracking and result storage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AI Service</strong></td>
+                        <td>OpenRouter API</td>
+                        <td>Off-site LLM Inference</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Storage</strong></td>
+                        <td>AWS S3</td>
+                        <td>Secure storage for PDF Resume files</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div class="footer">
+            <p>&copy; 2026 Resume AI Shortlister Project Documentation</p>
+        </div>
+    </div>
+
+    <!-- Mermaid Rendering -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <div class="container" style="margin-top: 20px;">
+        <h2 style="border: none; text-align: center;">Technical Workflow Diagram</h2>
+        <div class="mermaid">
+            graph LR
+            subgraph Frontend ["Frontend (React.js)"]
+            User((User)) -->|1. Uploads PDF/TXT| UI[Dashboard UI]
+            UI -->|6. Renders Analysis| UI
+            end
+
+            subgraph Backend ["Backend (Flask Server)"]
+            UI -->|2. POST Request| API[Analysis API]
+            API -->|3. Text Parsing| Ext[PyPDF2 Utility]
+            API -->|7. Persistence| DB[(resumes.db)]
+            end
+
+            subgraph AI ["AI Intelligence (OpenRouter)"]
+            API -->|4. Structured Prompt| Llama[Llama 3 model]
+            Llama -->|5. Structured JSON| API
+            end
+
+            %% Styling
+            style User fill:#f8fafc,stroke:#2563eb,stroke-width:2px
+            style UI fill:#eff6ff,stroke:#2563eb,stroke-width:2px
+            style API fill:#eff6ff,stroke:#2563eb,stroke-width:2px
+            style Llama fill:#fef3c7,stroke:#d97706,stroke-width:2px
+            style DB fill:#ecfdf5,stroke:#059669,stroke-width:2px
+        </div>
+    </div>
+</body>
+
+</html>

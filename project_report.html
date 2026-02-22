@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume AI Shortlister - Comprehensive Project Report</title>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            margin: 0 auto;
+            max-width: 210mm;
+            /* A4 width */
+            padding: 20mm;
+            background: #fff;
+            color: #000;
+        }
+
+        @media print {
+            body {
+                width: 210mm;
+                height: 297mm;
+                padding: 15mm;
+                margin: 0;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+        }
+
+        .page-break {
+            display: block;
+            page-break-before: always;
+            margin-top: 30px;
+            border-top: 1px dashed #ccc;
+            padding-top: 20px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: #000;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 24pt;
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 18pt;
+            margin-top: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 5px;
+        }
+
+        h3 {
+            font-size: 14pt;
+            margin-top: 20px;
+        }
+
+        h4 {
+            font-size: 12pt;
+            font-style: italic;
+        }
+
+        p {
+            text-align: justify;
+            margin-bottom: 15px;
+        }
+
+        ul,
+        ol {
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        .code-block {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 10pt;
+            background: #f5f5f5;
+            padding: 15px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .figure {
+            text-align: center;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .signature-lines {
+            margin-top: 100px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature {
+            text-align: center;
+            width: 200px;
+            border-top: 1px solid #000;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TITLE PAGE -->
+    <div class="center" style="margin-top: 150px;">
+        <h1>A PROJECT REPORT ON</h1>
+        <h1>RESUME AI SHORTLISTER</h1>
+        <p class="uppercase">Submitted in partial fulfillment of the requirements for the award of the degree of</p>
+        <h2>BACHELOR OF TECHNOLOGY</h2>
+        <p>IN</p>
+        <h3>COMPUTER SCIENCE AND ENGINEERING</h3>
+        <br><br>
+        <p><strong>SUBMITTED BY:</strong></p>
+        <h3>STUDENT NAME (REG NO)</h3>
+        <br><br>
+        <p><strong>UNDER THE GUIDANCE OF:</strong></p>
+        <h3>GUIDE NAME</h3>
+        <p>Assistant Professor, Dept of CSE</p>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- CERTIFICATE -->
+    <div class="center">
+        <h1>CERTIFICATE</h1>
+    </div>
+    <p>This is to certify that the project report entitled <strong>"RESUME AI SHORTLISTER"</strong> submitted by
+        <strong>STUDENT NAME</strong> in partial fulfillment of the requirements for the award of the degree of
+        <strong>Bachelor of Technology in Computer Science and Engineering</strong> is a bona fide record of the work
+        carried out by them under my supervision and guidance.</p>
+    <br><br><br>
+    <div class="signature-lines">
+        <div class="signature"><strong>Internal Guide</strong></div>
+        <div class="signature"><strong>Head of Department</strong></div>
+    </div>
+    <br><br><br>
+    <div class="center">
+        <p><strong>EXTERNAL EXAMINER</strong></p>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ACKNOWLEDGEMENT -->
+    <div class="center">
+        <h1>ACKNOWLEDGEMENT</h1>
+    </div>
+    <p>I would like to express my gratitude to my project guide, <strong>GUIDE NAME</strong>, for their valuable
+        guidance, constant support, and encouragement throughout the course of this project.</p>
+    <p>I am also thankful to the Head of the Department, <strong>HOD NAME</strong>, for providing the necessary
+        facilities and support to complete this project successfully.</p>
+    <p>I would like to thank our institution for creating a stimulating environment for learning and research. Last but
+        not least, I thank my parents and friends for their endless support and motivation.</p>
+    <div class="page-break"></div>
+
+    <!-- ABSTRACT -->
+    <div class="center">
+        <h1>ABSTRACT</h1>
+    </div>
+    <p>In the highly competitive era of modern recruitment, Human Resource (HR) departments are inundated with an
+        overwhelming volume of applications for every job opening. The traditional manual screening process is
+        labor-intensive, time-consuming, and prone to human biases, often resulting in prolonged hiring cycles and the
+        potential oversight of qualified candidates.</p>
+    <p>The <strong>Resume AI Shortlister</strong> is a cutting-edge web application designed to automate and optimize
+        the initial resume screening process. Utilizing state-of-the-art <strong>Large Language Models (LLMs)</strong>,
+        specifically Meta's Llama 3 model, the system analyzes candidate resumes against specific job descriptions in
+        real-time. Unlike traditional Applicant Tracking Systems (ATS) that rely on rigid keyword matching, this system
+        leverages natural language understanding to evaluate candidates based on the semantic meaning of their skills,
+        experience, and project work.</p>
+    <p>Users can upload resumes in PDF format and specify a target job role. The system parses the document, correlates
+        the comprehensive profile with the requirements, and generates a detailed report card. This report includes a
+        compatibility score (0-100), a definitive "Shortlisted" or "Not Shortlisted" status, and a qualitative analysis
+        highlighting the candidate's strengths, weaknesses, and suggestions for improvement.</p>
+    <p>The project is implemented using a <strong>Flask (Python)</strong> backend for robust API handling and
+        <strong>React.js</strong> for a responsive, modern frontend interface. The integration of <strong>Generative
+            AI</strong> ensures that the evaluation is consistent, objective, and deeply analytical, significantly
+        reducing the "Time to Hire" for organizations.</p>
+    <div class="page-break"></div>
+
+    <!-- TABLE OF CONTENTS -->
+    <div class="center">
+        <h1>TABLE OF CONTENTS</h1>
+    </div>
+    <table>
+        <tr>
+            <th>Chapter</th>
+            <th>Title</th>
+            <th>Page No.</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>INTRODUCTION</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>LITERATURE SURVEY</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>SYSTEM ANALYSIS</td>
+            <td>12</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>SYSTEM DESIGN</td>
+            <td>18</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>IMPLEMENTATION DETAILS</td>
+            <td>28</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>SYSTEM TESTING</td>
+            <td>35</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>RESULTS AND DISCUSSION</td>
+            <td>40</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>CONCLUSION AND FUTURE SCOPE</td>
+            <td>43</td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>BIBLIOGRAPHY</td>
+            <td>44</td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>APPENDIX (SOURCE CODE)</td>
+            <td>45</td>
+        </tr>
+    </table>
+    <div class="page-break"></div>
+
+    <!-- CHAPTER 1: INTRODUCTION -->
+    <h2>1. INTRODUCTION</h2>
+
+    <h3>1.1 Overview</h3>
+    <p>Recruitment is a critical function of any organization, determining the quality of human capital that drives
+        business success. However, the process of finding the right talent is fraught with challenges, primarily the
+        "Volume vs. Quality" problem. A single job posting on a popular platform like LinkedIn or Indeed can attract
+        hundreds, if not thousands, of applicants within days. For a recruiter, sifting through this mountain of
+        documents to find the few "needles in the haystack" is a daunting task.</p>
+    <p>The <strong>Resume AI Shortlister</strong> project addresses this challenge by introducing Artificial
+        Intelligence into the recruitment funnel. It serves as an intelligent assistant that pre-screens candidates,
+        allowing human recruiters to focus their energy on interviewing and engaging with the top 10% of applicants
+        rather than reading the bottom 90%.</p>
+
+    <h3>1.2 Problem Statement</h3>
+    <p>The traditional recruitment process suffers from several critical inefficiencies:</p>
+    <ul>
+        <li><strong>High Volume, Low Bandwidth:</strong> Recruiters spend an average of 6-7 seconds per resume (The
+            Ladders, 2018). This rapid scanning leads to missed details and qualified candidates being overlooked.</li>
+        <li><strong>Keyword Bias:</strong> Traditional ATS software adheres strictly to keyword matching. A candidate
+            who lists "Software Engineering" might be rejected for a role requiring "Software Development" simply
+            because the keywords don't match exactly, despite the roles being identical.</li>
+        <li><strong>Unconscious Bias:</strong> Human recruiters may unconsciously bias their selection based on factors
+            such as gender, university name, or gaps in employment, rather than pure skill alignment.</li>
+        <li><strong>Fatigue:</strong> After reviewing 50 resumes, a recruiter's attention to detail significantly drops,
+            leading to inconsistent evaluation criteria between the first and last applicant.</li>
+    </ul>
+
+    <h3>1.3 Objectives</h3>
+    <p>The primary objectives of this project are:</p>
+    <ol>
+        <li>To develop a web-based application that accepts resume uploads in PDF format.</li>
+        <li>To implement an intelligent parsing engine that extracts text from documents accurately.</li>
+        <li>To integrate a Generative AI model that understands context, synonyms, and implied skills.</li>
+        <li>To provide a quantified "Compatibility Score" that ranks candidates objectively.</li>
+        <li>To generate actionable feedback (Strengths/Weaknesses) that explains <i>why</i> a candidate was shortlisted
+            or rejected.</li>
+        <li>To ensure a user-friendly experience with immediate feedback and visual data representation.</li>
+    </ol>
+
+    <h3>1.4 Scope of the Project</h3>
+    <p>The current scope of the project focuses on the initial screening phase. It is designed to evaluate individual
+        resumes against specific job roles. The system supports PDF files, which are the industry standard for
+        professional documents. It is built as a modular application, meaning the AI model can be swapped or upgraded
+        without rewriting the entire core logic.</p>
+    <p>The scope includes:</p>
+    <ul>
+        <li><strong>Frontend:</strong> A React-based Single Page Application (SPA).</li>
+        <li><strong>Backend:</strong> A Python Flask REST API.</li>
+        <li><strong>AI Integration:</strong> OpenRouter API connecting to Llama 3.</li>
+        <li><strong>Data Handling:</strong> In-memory processing with optional SQLite logging.</li>
+    </ul>
+
+    <h3>1.5 Methodology</h3>
+    <p>The project follows the <strong>Agile Software Development Life Cycle (SDLC)</strong>. This iterative approach
+        allows for continuous refinement of the prompt engineering and UI/UX based on testing feedback. The phases
+        include:</p>
+    <ul>
+        <li><strong>Requirement Analysis:</strong> Identifying the key metrics for resume evaluation.</li>
+        <li><strong>Design:</strong> Architecting the separation between Frontend, Backend, and AI Service.</li>
+        <li><strong>Development:</strong> Building the application in two-week sprints.</li>
+        <li><strong>Testing:</strong> Verifying AI accuracy and system stability.</li>
+        <li><strong>Deployment:</strong> Final release and documentation.</li>
+    </ul>
+    <div class="page-break"></div>
+
+    <!-- CHAPTER 2: LITERATURE SURVEY -->
+    <h2>2. LITERATURE SURVEY AND THEORETICAL BACKGROUND</h2>
+
+    <h3>2.1 Artificial Intelligence in Recruitment</h3>
+    <p>The integration of AI in HR, often termed "People Analytics" or "Talent Intelligence," has grown exponentially.
+        Early systems used simple Rule-Based Systems (RBS) where recruiters defined strict "If-Then" rules (e.g., "If
+        Experience < 3 years, then Reject"). While transparent, these systems lacked flexibility.</p>
+            <p>Modern approaches utilize <strong>Machine Learning (ML)</strong> and <strong>Natural Language Processing
+                    (NLP)</strong>. According to a 2023 report by Gartner, 81% of HR leaders have explored or
+                implemented AI solutions to improve process efficiency. AI can identify patterns in successful hires and
+                apply those patterns to new applicants, moving beyond simple keyword matching to semantic matching.</p>
+
+            <h3>2.2 Large Language Models (LLMs)</h3>
+            <p>At the core of this project is a Large Language Model. LLMs are deep learning algorithms that can
+                recognize, summarize, translate, predict, and generate text and other content based on knowledge gained
+                from massive datasets.</p>
+            <p><strong>Meta Llama 3 (8B Instruct):</strong> We utilize the Llama 3 model, an open-weights model by Meta.
+                It is a decoder-only transformer architecture. Key advantages for this project include:</p>
+            <ul>
+                <li><strong>Contextual Understanding:</strong> It understands that "React.js" and "Frontend Development"
+                    are related concepts.</li>
+                <li><strong>Instruction Following:</strong> It can strictly follow the instruction to "Return ONLY
+                    JSON," which is critical for system integration.</li>
+                <li><strong>Zero-Shot Learning:</strong> It can evaluate a "Data Scientist" resume without needing to be
+                    specifically trained on thousands of Data Science resumes beforehand, relying on its general
+                    training data.</li>
+            </ul>
+
+            <h3>2.3 Retrieval Augmented Generation (RAG) Concepts</h3>
+            <p>While not a full RAG system with a vector database, the project utilizes RAG principles by injecting
+                specific context (the Resume Content and the Job Role) into the prompt window of the LLM. This
+                "Grounding" ensures the AI generates answers based solely on the provided document, reducing
+                hallucinations.</p>
+
+            <h3>2.4 Technology Stack Analysis</h3>
+
+            <h4>2.4.1 Python & Flask</h4>
+            <p><strong>Python</strong> is the de-facto language of AI and Data Science due to its rich ecosystem
+                libraries. <strong>Flask</strong> is a micro-web framework written in Python. It is classified as a
+                microframework because it does not require particular tools or libraries. It has no database abstraction
+                layer, form validation, or any other components where pre-existing third-party libraries provide common
+                functions. This makes it lightweight and perfect for wrapping an AI model in a simple API endpoint.</p>
+
+            <h4>2.4.2 React.js</h4>
+            <p><strong>React</strong> is a free and open-source front-end JavaScript library for building user
+                interfaces based on components. It is maintained by Meta. For this project, React allows us to build a
+                dynamic "Upload -> Processing -> Result" flow without reloading the page, providing a seamless
+                "App-like" feel.</p>
+
+            <h4>2.4.3 Vite</h4>
+            <p><strong>Vite</strong> is a build tool that aims to provide a faster and leaner development experience for
+                modern web projects. It consists of a dev server that serves your source files over native ES modules
+                and a build command that bundles your code with Rollup for production.</p>
+
+            <h3>2.5 Comparison with Existing Solutions</h3>
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>Traditional ATS</th>
+                    <th>Resume AI Shortlister (Proposed)</th>
+                </tr>
+                <tr>
+                    <td><strong>Matching Logic</strong></td>
+                    <td>Keyword Exact Match</td>
+                    <td>Semantic & Contextual Match</td>
+                </tr>
+                <tr>
+                    <td><strong>Feedback</strong></td>
+                    <td>None / Generic Rejection</td>
+                    <td>Detailed Strengths & Weaknesses</td>
+                </tr>
+                <tr>
+                    <td><strong>Bias</strong></td>
+                    <td>High (Formatting bias)</td>
+                    <td>Low (Content focused)</td>
+                </tr>
+                <tr>
+                    <td><strong>Setup</strong></td>
+                    <td>Complex Enteprise Software</td>
+                    <td>Plug-and-Play Web Tool</td>
+                </tr>
+            </table>
+            <div class="page-break"></div>
+
+            <!-- CHAPTER 3: SYSTEM ANALYSIS -->
+            <h2>3. SYSTEM ANALYSIS</h2>
+
+            <h3>3.1 Feasibility Study</h3>
+            <p>Before development, a feasibility study was conducted to determine the viability of the project.</p>
+
+            <h4>3.1.1 Technical Feasibility</h4>
+            <p>The project requires integrating a frontend, a backend, and an external API. The team possesses the
+                necessary skills in Python and JavaScript. The availability of powerful public APIs (OpenRouter)
+                eliminates the need for expensive local GPU hardware to run the LLM. <strong>Verdict: Feasible.</strong>
+            </p>
+
+            <h4>3.1.2 Economic Feasibility</h4>
+            <p>The development cost involves only developer time and a minimal cost for API tokens. OpenRouter offers
+                competitive pricing (dollars per million tokens). Compared to the cost of human hours saved (recruiter
+                salary), the ROI is positive. <strong>Verdict: Feasible.</strong></p>
+
+            <h4>3.1.3 Operational Feasibility</h4>
+            <p>The system is designed to be intuitive. No special training is required for HR staff. They simply upload
+                a file and read the result. It fits seamlessly into existing workflows. <strong>Verdict:
+                    Feasible.</strong></p>
+
+            <h3>3.2 Requirements Specification</h3>
+
+            <h4>3.2.1 Functional Requirements</h4>
+            <ol>
+                <li><strong>Resume Upload:</strong> The system must accept .pdf files up to 5MB.</li>
+                <li><strong>Role Specification:</strong> The user must be able to input the Job Role/Description.</li>
+                <li><strong>Text Extraction:</strong> The system must strip all formatting and extract pure text from
+                    the PDF.</li>
+                <li><strong>Analysis Generation:</strong> The system must generate a 0-100 score and qualitative
+                    feedback.</li>
+                <li><strong>Data Validation:</strong> The system must reject non-PDF files and empty inputs.</li>
+                <li><strong>Result Display:</strong> The system must clearly show the "Shortlisted" status based on a
+                    configurable threshold (e.g., Score > 60).</li>
+            </ol>
+
+            <h4>3.2.2 Non-Functional Requirements</h4>
+            <ol>
+                <li><strong>Performance:</strong> The analysis should complete within 15 seconds.</li>
+                <li><strong>Reliability:</strong> The system should handle API timeouts gracefully with user-friendly
+                    error messages.</li>
+                <li><strong>Security:</strong> Candidate data must be processed in memory and not exposed publicly. API
+                    keys must be secured server-side.</li>
+                <li><strong>Usability:</strong> The UI should be responsive and work on mobile and desktop devices.</li>
+            </ol>
+
+            <h3>3.3 System Environment Checklist</h3>
+            <p>To deploy the application, the following environment is required:</p>
+            <ul>
+                <li><strong>Server Side:</strong> Python 3.8+, Flask 2.0+, PyPDF2, Requests.</li>
+                <li><strong>Client Side:</strong> Node.js 16+ (for build), Modern Web Browser.</li>
+                <li><strong>External:</strong> Active Internet Connection (for AI API), OpenRouter API Key.</li>
+            </ul>

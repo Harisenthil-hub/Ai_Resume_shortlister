@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>System Implementation &amp; Maintenance — AI Resume Shortlister</title>
+</head>
+
+<body>
+
+    <h1>System Implementation &amp; Maintenance</h1>
+    <h3>AI Resume Shortlister</h3>
+    <hr>
+
+    <!-- ================================================================ -->
+    <h2>1. System Implementation</h2>
+
+    <h3>1.1 Technology Stack</h3>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>Layer</th>
+            <th>Technology</th>
+            <th>Version</th>
+            <th>Purpose</th>
+        </tr>
+        <tr>
+            <td>Frontend</td>
+            <td>React + Vite</td>
+            <td>React 18, Vite 5</td>
+            <td>User interface and single-page application</td>
+        </tr>
+        <tr>
+            <td>Backend</td>
+            <td>Flask (Python)</td>
+            <td>Python 3.10+</td>
+            <td>REST API server</td>
+        </tr>
+        <tr>
+            <td>Database</td>
+            <td>SQLite</td>
+            <td>Built-in</td>
+            <td>Local file-based data storage</td>
+        </tr>
+        <tr>
+            <td>AI Service</td>
+            <td>Groq API</td>
+            <td>LLaMA 3.1 8B</td>
+            <td>Resume evaluation and scoring</td>
+        </tr>
+        <tr>
+            <td>PDF Parsing</td>
+            <td>PyPDF2</td>
+            <td>3.x</td>
+            <td>Extract text from PDF resumes</td>
+        </tr>
+    </table>
+
+    <h3>1.2 System Architecture</h3>
+    <pre>
++-------------------+         +-------------------+         +-------------------+
+|                   |  HTTP   |                   |  HTTPS  |                   |
+|   React Frontend  | ------> |   Flask Backend    | ------> |   Groq AI API     |
+|   (Port 5173)     |  /api/* |   (Port 5000)      |         |   (LLaMA 3.1)     |
+|                   |         |                   |         |                   |
++-------------------+         +--------+----------+         +-------------------+
+                                       |
+                                       | SQLite
+                                       v
+                              +-------------------+
+                              |    resumes.db      |
+                              |   (Local File)     |
+                              +-------------------+
+</pre>
+
+    <h3>1.3 Module Description</h3>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>File</th>
+            <th>Module</th>
+            <th>Responsibility</th>
+        </tr>
+        <tr>
+            <td>app.py</td>
+            <td>API Server</td>
+            <td>Flask application with REST API endpoints for resume upload, analysis, and history retrieval</td>
+        </tr>
+        <tr>
+            <td>llm_client.py</td>
+            <td>AI Client</td>
+            <td>Handles communication with Groq API, sends prompts, parses JSON responses, normalizes scores</td>
+        </tr>
+        <tr>
+            <td>database.py</td>
+            <td>Data Layer</td>
+            <td>Database schema definition, connection management, CRUD operations for resume records</td>
+        </tr>
+        <tr>
+            <td>utils.py</td>
+            <td>Utilities</td>
+            <td>File text extraction from PDF and plain text uploads</td>
+        </tr>
+        <tr>
+            <td>UploadPage.jsx</td>
+            <td>Upload UI</td>
+            <td>Drag-and-drop resume upload interface with role selection</td>
+        </tr>
+        <tr>
+            <td>ResultPage.jsx</td>
+            <td>Result UI</td>
+            <td>Displays AI analysis results with score circle, strengths, weaknesses, suggestions</td>
+        </tr>
+        <tr>
+            <td>HistoryPage.jsx</td>
+            <td>History UI</td>
+            <td>Shows all previously analyzed resumes with expandable detail rows</td>
+        </tr>
+    </table>
+
+    <h3>1.4 API Endpoints</h3>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>Method</th>
+            <th>Endpoint</th>
+            <th>Input</th>
+            <th>Output</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/analyze-resume</td>
+            <td>FormData: resume (file), role (text)</td>
+            <td>JSON: filename, role, analysis (score, shortlisted, strengths, weaknesses, suggestions)</td>
+            <td>Upload and analyze a resume against a job role</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/resumes</td>
+            <td>None</td>
+            <td>JSON array of all past analysis records</td>
+            <td>Retrieve analysis history from database</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/health</td>
+            <td>None</td>
+            <td>JSON: { "status": "healthy" }</td>
+            <td>Health check for server monitoring</td>
+        </tr>
+    </table>
+
+    <h3>1.5 Request Flow</h3>
+    <pre>
+User uploads resume + selects role
+        |
+        v
+Frontend sends POST /api/analyze-resume (FormData)
+        |
+        v
+Flask receives file --> utils.py extracts text (PDF or TXT)
+        |
+        v
+llm_client.py sends prompt + resume text to Groq API
+        |
+        v
+Groq returns JSON: score, strengths, weaknesses, suggestions
+        |
+        v
+database.py saves result to resumes.db
+        |
+        v
+Flask returns JSON response to frontend
+        |
+        v
+Frontend navigates to ResultPage and displays analysis
+</pre>
+
+    <!-- ================================================================ -->
+    <h2>2. System Maintenance</h2>
+
+    <h3>2.1 Environment Setup</h3>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>Requirement</th>
+            <th>Purpose</th>
+            <th>Installation</th>
+        </tr>
+        <tr>
+            <td>Python 3.10+</td>
+            <td>Backend runtime</td>
+            <td>python.org/downloads</td>
+        </tr>
+        <tr>
+            <td>Node.js 18+</td>
+            <td>Frontend build tool</td>
+            <td>nodejs.org</td>
+        </tr>
+        <tr>
+            <td>Groq API Key</td>
+            <td>AI service access</td>
+            <td>console.groq.com/keys</td>
+        </tr>
+    </table>
+
+    <h3>2.2 Configuration Files</h3>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>File</th>
+            <th>Variables</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>.env</td>
+            <td>GROQ_API_KEY</td>
+            <td>API key for Groq AI service (required)</td>
+        </tr>
+        <tr>
+            <td>.env</td>
+            <td>GROQ_MODEL</td>
+            <td>AI model name (default: llama-3.1-8b-instant)</td>
+        </tr>
+        <tr>
+            <td>vite.config.js</td>
+            <td>proxy /api</td>
+            <td>Forwards frontend API calls to Flask backend at port 5000</td>
+        </tr>
+    </table>
+
+    <h3>2.3 Running the Application</h3>
+    <pre>
+Step 1: Set up Python virtual environment
+    python -m venv venv
+    .\venv\Scripts\activate          (Windows)
+    source venv/bin/activate          (Mac/Linux)
+
+Step 2: Install backend dependencies
+    pip install -r requirements.txt
+
+Step 3: Configure .env file
+    GROQ_API_KEY=your_key_here
+    GROQ_MODEL=llama-3.1-8b-instant
+
+Step 4: Start the backend (Terminal 1)
+    python app.py
+    → Runs on http://localhost:5000
+
+Step 5: Install frontend dependencies
+    cd frontend
+    npm install
+
+Step 6: Start the frontend (Terminal 2)
+    npm run dev
+    → Runs on http://localhost:5173
+</pre>
+
+    <h3>2.4 Database Maintenance</h3>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>Task</th>
+            <th>Procedure</th>
+        </tr>
+        <tr>
+            <td>View database</td>
+            <td>Use any SQLite viewer (DB Browser for SQLite) to open resumes.db</td>
+        </tr>
+        <tr>
+            <td>Reset database</td>
+            <td>Delete resumes.db file and restart the backend; it will auto-recreate</td>
+        </tr>
+        <tr>
+            <td>Backup database</td>
+            <td>Copy resumes.db file to a backup location</td>
+        </tr>
+        <tr>
+            <td>Schema changes</td>
+            <td>Update SCHEMA_SQL in database.py, delete resumes.db, and restart</td>
+        </tr>
+    </table>
+
+    <h3>2.5 Troubleshooting</h3>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>Issue</th>
+            <th>Cause</th>
+            <th>Solution</th>
+        </tr>
+        <tr>
+            <td>Score always 0, suggestions show "AI Service Timeout or Error"</td>
+            <td>Invalid or expired API key</td>
+            <td>Get a new key from console.groq.com and update .env</td>
+        </tr>
+        <tr>
+            <td>ECONNREFUSED :5000</td>
+            <td>Backend not running</td>
+            <td>Start backend with: python app.py</td>
+        </tr>
+        <tr>
+            <td>Blank page on frontend</td>
+            <td>Frontend not running</td>
+            <td>Run: cd frontend && npm run dev</td>
+        </tr>
+        <tr>
+            <td>"no such column" database error</td>
+            <td>Outdated database schema</td>
+            <td>Delete resumes.db and restart backend</td>
+        </tr>
+        <tr>
+            <td>Model decommissioned error</td>
+            <td>AI model no longer available</td>
+            <td>Check available models at console.groq.com and update GROQ_MODEL in .env</td>
+        </tr>
+    </table>
+
+    <h3>2.6 Future Enhancements</h3>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>#</th>
+            <th>Enhancement</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>User authentication</td>
+            <td>Add login system so multiple users can maintain separate histories</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Batch upload</td>
+            <td>Allow uploading and analyzing multiple resumes at once</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Export results</td>
+            <td>Download analysis results as PDF or CSV</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Custom job descriptions</td>
+            <td>Allow pasting full job descriptions instead of just role names</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Cloud deployment</td>
+            <td>Deploy to a cloud platform (Render, Railway, Vercel) for remote access</td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

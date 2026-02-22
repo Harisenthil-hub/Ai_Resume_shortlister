@@ -45,6 +45,24 @@ export default function ResultPage({ result }) {
                 >
                     ← Upload Another Resume
                 </button>
+                <button
+                    onClick={() => navigate('/history')}
+                    style={{
+                        background: 'none',
+                        border: '1px solid var(--border)',
+                        color: 'var(--text-secondary)',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '8px',
+                        fontWeight: 500,
+                        transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={(e) => { e.target.style.borderColor = 'var(--primary)'; e.target.style.color = 'var(--text-main)' }}
+                    onMouseLeave={(e) => { e.target.style.borderColor = 'var(--border)'; e.target.style.color = 'var(--text-secondary)' }}
+                >
+                    📋 History
+                </button>
             </header>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) 2fr', gap: '2rem', alignItems: 'start' }}>
